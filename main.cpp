@@ -111,7 +111,7 @@ CueStick::CueStick(float length, float thickness, const sf::Vector2f& position) 
 void CueStick::update(const sf::Vector2i& mousePos) {
     sf::Vector2f direction = sf::Vector2f(mousePos) - stick.getPosition();
     float angle = std::atan2(direction.y, direction.x);
-    stick.setRotation(angle * 180 / 3.14159f);  // Convert radians to degrees
+    stick.setRotation(angle * 180 / 3.14159f);
 }
 
 void CueStick::draw(sf::RenderWindow& window) const {

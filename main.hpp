@@ -5,7 +5,6 @@
 #include <vector>
 #include <cmath>
 
-// Tambahkan konstanta-konstanta ini di bagian atas file header
 const float TABLE_WIDTH = 1100.0f;
 const float TABLE_HEIGHT = 600.0f;
 const float BALL_RADIUS = 18.0f;
@@ -15,7 +14,7 @@ class Ball {
 private:
     sf::CircleShape shape;
     sf::Vector2f velocity;
-    bool isStriped;  // Menyimpan apakah bola bergaris
+    bool isStriped;  
 
 public:
     Ball(float radius, const sf::Color& color, bool isStriped, const sf::Vector2f& position, const sf::Vector2f& initialVelocity);
