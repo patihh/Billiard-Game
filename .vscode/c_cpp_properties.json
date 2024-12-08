@@ -4,13 +4,23 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "C:/Programming/SFML/include"
+                "${workspaceFolder}/Ball",
+                "${workspaceFolder}/Table",
+                "${workspaceFolder}/CueStick",
+                "${workspaceFolder}/Game",
+                "C:/Programming/SFML/include",
+                "C:/Programming/MinGW/include"
             ],
-            "defines": [],
-            "compilerPath": "C:/Programming/MinGW/bin/g++.exe",
-            "cStandard": "c11",
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "windowsSdkVersion": "10.0.22621.0",
+            "compilerPath": "cl.exe",
+            "cStandard": "c17",
             "cppStandard": "c++17",
-            "intelliSenseMode": "windows-gcc-x64"
+            "intelliSenseMode": "windows-msvc-x64"
         }
     ],
     "version": 4

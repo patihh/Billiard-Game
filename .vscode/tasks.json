@@ -2,19 +2,21 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build SFML Project",
+            "label": "Build BilliardGame",
             "type": "shell",
             "command": "g++",
             "args": [
-                "-g",
-                "${workspaceFolder}/main.cpp",
-                "-o",
-                "${workspaceFolder}/main",
-                "-I",
-                "C:/Programming/SFML/include",
-                "-L",
-                "C:/Programming/SFML/lib",
-                "-lsfml-graphics",
+                "-std=c++17",
+                "-I${workspaceFolder}",                 // Include header dari workspace
+                "-IC:/Programming/SFML/include",              // Ganti "/path/to/SFML" sesuai lokasi SFML
+                "-LC:/Programming/SFML/lib",                  // Ganti "/path/to/SFML" sesuai lokasi SFML
+                "-o", "${workspaceFolder}/BilliardGame", // Output program
+                "${workspaceFolder}/main.cpp",          // Tambahkan semua file .cpp
+                "${workspaceFolder}/Ball/Ball.cpp",
+                "${workspaceFolder}/Table/Table.cpp",
+                "${workspaceFolder}/CueStick/CueStick.cpp",
+                "${workspaceFolder}/Game/Game.cpp",
+                "-lsfml-graphics",                     // Library SFML
                 "-lsfml-window",
                 "-lsfml-system"
             ],
@@ -22,7 +24,8 @@
                 "kind": "build",
                 "isDefault": true
             },
-            "problemMatcher": ["$gcc"]
+            "problemMatcher": ["$gcc"],
+            "detail": "Task to build the project"
         }
     ]
 }

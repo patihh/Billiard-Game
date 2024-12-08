@@ -2,17 +2,17 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug SFML Project",
+            "name": "Run BilliardGame",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/main",
+            "program": "${workspaceFolder}/BilliardGame",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
-            "miDebuggerPath": "C:/Programming/MinGW/bin/gdb.exe",
+            "miDebuggerPath": "C:/Programming/MinGW/bin/gdb.exe", // Ganti dengan path GDB
             "setupCommands": [
                 {
                     "description": "Enable pretty-printing for gdb",
