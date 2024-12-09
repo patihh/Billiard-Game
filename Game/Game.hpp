@@ -6,6 +6,10 @@
 #include "../CueStick/CueStick.hpp"
 #include <vector>
 
+const float TABLE_WIDTH = 1100.0f;
+const float TABLE_HEIGHT = 600.0f;
+const float BALL_RADIUS = 18.0f;
+
 class Game {
 private:
     Table table;

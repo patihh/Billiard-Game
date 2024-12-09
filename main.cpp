@@ -1,6 +1,8 @@
 #include "Game/Game.hpp"
 #include <SFML/Graphics.hpp>
 
+
+
 int main() {
     sf::RenderWindow window(sf::VideoMode(1100, 600), "Billiard Game");
     Game game;
