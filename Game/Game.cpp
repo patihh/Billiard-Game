@@ -50,24 +50,31 @@ void Game::update(float deltaTime, const sf::RenderWindow& window) {
         ball.update(deltaTime, table.getBounds());
     }
     handleCollisions();
-    
-    // Mengambil posisi mouse
-    sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-    cueStick.update(mousePos);
 
-    // Mengatur kekuatan pukulan berdasarkan posisi mouse
+    // Get mouse position
+    sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+    
+    // Update cue stick direction
+    cueStick.update(mousePos, whiteBall.getPosition());
+
+    // Handle shot strength and hitting the white ball
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-        // Menghitung arah antara bola putih dan posisi mouse
+        // Calculate direction and strength (magnitude) of the shot
         sf::Vector2f direction = sf::Vector2f(mousePos) - whiteBall.getPosition();
-        
-        // Menghitung magnitude (jarak) dan normalisasi arah
         float magnitude = std::sqrt(direction.x * direction.x + direction.y * direction.y);
         if (magnitude > 0) {
-            direction /= magnitude;  // Normalisasi arah
+            direction /= magnitude;  // Normalize the direction
 
-            // Menghitung kecepatan berdasarkan kekuatan tarikan mouse
-            whiteBall.setVelocity(direction * magnitude * 0.5f);  // Kecepatan dipengaruhi oleh jarak mouse
+            // Set the velocity of the white ball based on the mouse drag (strength)
+            whiteBall.setVelocity(direction * magnitude * 0.5f);  // Multiply by a factor for strength
         }
+    }
+
+    // Check if the white ball has stopped
+    if (whiteBall.getVelocity() == sf::Vector2f(0.0f, 0.0f)) {
+        cueStick.setVisible(true); // Show cue stick when the ball stops
+    } else {
+        cueStick.setVisible(false); // Hide cue stick while the ball is moving
     }
 }
 
