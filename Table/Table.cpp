@@ -66,3 +66,7 @@ bool Table::isBallInPocket(const sf::Vector2f& ballPosition, float ballRadius) c
     }
     return false;
 }
+
+sf::Vector2f Table::getPocketPosition(int index) const {
+    return pockets[index].getPosition();
+}

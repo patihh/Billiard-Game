@@ -42,3 +42,11 @@ void Ball::setVelocity(const sf::Vector2f& vel) {
 bool Ball::getIsStriped() const {
     return isStriped;
 }
+
+void Ball::setPosition(const sf::Vector2f& position) {
+    shape.setPosition(position);
+}
+
+sf::Vector2f Ball::getVelocity() const {
+    return velocity;
+}

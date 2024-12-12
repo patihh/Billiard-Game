@@ -16,7 +16,6 @@ private:
     Ball whiteBall;
     std::vector<Ball> balls;
     CueStick cueStick;
-
     void handleCollisions();
     bool checkCollision(Ball& ball1, Ball& ball2);
     void checkPockets();
@@ -27,6 +26,7 @@ public:
     void update(float deltaTime, const sf::RenderWindow& window);
     void draw(sf::RenderWindow& window);
     bool checkPockets(Ball& ball);
+    sf::Vector2f randomPocketPosition();
 };
 
 #endif

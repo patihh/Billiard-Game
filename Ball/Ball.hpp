@@ -11,13 +11,13 @@ private:
 
 public:
     Ball(float radius, const sf::Color& color, bool striped, const sf::Vector2f& position, const sf::Vector2f& initialVelocity);
-
     void update(float deltaTime, const sf::FloatRect& tableBounds);
     void draw(sf::RenderWindow& window) const;
-
+    void setPosition(const sf::Vector2f& position);
     sf::Vector2f getPosition() const;
     void setVelocity(const sf::Vector2f& vel);
     bool getIsStriped() const;
+    sf::Vector2f getVelocity() const;
 };
 
 #endif

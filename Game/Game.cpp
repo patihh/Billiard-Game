@@ -50,15 +50,23 @@ void Game::update(float deltaTime, const sf::RenderWindow& window) {
         ball.update(deltaTime, table.getBounds());
     }
     handleCollisions();
+    
+    // Mengambil posisi mouse
     sf::Vector2i mousePos = sf::Mouse::getPosition(window);
     cueStick.update(mousePos);
 
+    // Mengatur kekuatan pukulan berdasarkan posisi mouse
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+        // Menghitung arah antara bola putih dan posisi mouse
         sf::Vector2f direction = sf::Vector2f(mousePos) - whiteBall.getPosition();
+        
+        // Menghitung magnitude (jarak) dan normalisasi arah
         float magnitude = std::sqrt(direction.x * direction.x + direction.y * direction.y);
         if (magnitude > 0) {
-            direction /= magnitude; // Normalisasi arah
-            whiteBall.setVelocity(direction * 500.0f); // Kecepatan awal bola putih
+            direction /= magnitude;  // Normalisasi arah
+
+            // Menghitung kecepatan berdasarkan kekuatan tarikan mouse
+            whiteBall.setVelocity(direction * magnitude * 0.5f);  // Kecepatan dipengaruhi oleh jarak mouse
         }
     }
 }
@@ -78,13 +86,48 @@ void Game::handleCollisions() {
             checkCollision(balls[i], balls[j]);
         }
         checkCollision(whiteBall, balls[i]);
+        
+        // Check if the white ball or any other ball enters a pocket
+        if (checkPockets(balls[i])) {
+            balls[i].setPosition(randomPocketPosition());
+            balls[i].setVelocity(sf::Vector2f(0.0f, 0.0f)); // Stop the ball
+        }
     }
+
+    if (checkPockets(whiteBall)) {
+        whiteBall.setPosition(randomPocketPosition()); // Player can place the ball after it falls in the pocket
+        whiteBall.setVelocity(sf::Vector2f(0.0f, 0.0f)); // Stop the ball
+    }
+}
+
+sf::Vector2f Game::randomPocketPosition() {
+    // Return a random position near one of the pockets on the table
+    // You can randomize this based on the pockets' positions.
+    int pocketIndex = rand() % 6;
+    return table.getPocketPosition(pocketIndex);
 }
 
 bool Game::checkCollision(Ball& ball1, Ball& ball2) {
     sf::Vector2f delta = ball2.getPosition() - ball1.getPosition();
     float distance = std::sqrt(delta.x * delta.x + delta.y * delta.y);
-    return (distance < BALL_RADIUS * 2.0f);
+
+    if (distance < BALL_RADIUS * 2.0f) {
+        // Collision detected, calculate response
+        sf::Vector2f normal = delta / distance; // Normalized collision vector
+        sf::Vector2f relativeVelocity = ball2.getVelocity() - ball1.getVelocity();
+        float speed = relativeVelocity.x * normal.x + relativeVelocity.y * normal.y;
+
+        // Elastic collision formula (simplified)
+        if (speed < 0) {
+            float restitution = 0.9f; // Coefficient of restitution
+            float impulse = 2 * speed / (1.0f / BALL_RADIUS + 1.0f / BALL_RADIUS);
+            sf::Vector2f impulseVector = normal * impulse;
+
+            ball1.setVelocity(ball1.getVelocity() + impulseVector / BALL_RADIUS);
+            ball2.setVelocity(ball2.getVelocity() - impulseVector / BALL_RADIUS);
+        }
+    }
+    return false;
 }
 
 bool Game::checkPockets(Ball& ball) {

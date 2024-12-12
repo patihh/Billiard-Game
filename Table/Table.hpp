@@ -14,7 +14,7 @@ public:
 
     void draw(sf::RenderWindow& window) const;
     sf::FloatRect getBounds() const;
-
+    sf::Vector2f getPocketPosition(int index) const;
     bool isBallInPocket(const sf::Vector2f& ballPosition, float ballRadius) const;
 };
 
