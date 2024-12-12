@@ -51,30 +51,30 @@ void Game::update(float deltaTime, const sf::RenderWindow& window) {
     }
     handleCollisions();
 
-    // Get mouse position
+    // Mengambil posisi mouse
     sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+
+    // Menentukan apakah tombol mouse ditekan
+    bool isMousePressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
     
-    // Update cue stick direction
-    cueStick.update(mousePos, whiteBall.getPosition());
+    // Update cue stick, dengan parameter isMousePressed
+    cueStick.update(mousePos, isMousePressed);
 
-    // Handle shot strength and hitting the white ball
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-        // Calculate direction and strength (magnitude) of the shot
-        sf::Vector2f direction = sf::Vector2f(mousePos) - whiteBall.getPosition();
-        float magnitude = std::sqrt(direction.x * direction.x + direction.y * direction.y);
-        if (magnitude > 0) {
-            direction /= magnitude;  // Normalize the direction
+    // Saat mouse dilepas, pukul bola putih
+    if (!isMousePressed) {
+        if (cueStick.getPosition() != cueStick.getOriginalPosition()) {
+            // Menghitung arah dan kekuatan pukulan berdasarkan posisi mouse
+            sf::Vector2f direction = sf::Vector2f(mousePos) - whiteBall.getPosition();
+            float magnitude = std::sqrt(direction.x * direction.x + direction.y * direction.y);
 
-            // Set the velocity of the white ball based on the mouse drag (strength)
-            whiteBall.setVelocity(direction * magnitude * 0.5f);  // Multiply by a factor for strength
+            // Normalisasi dan tentukan kecepatan bola putih
+            if (magnitude > 0) {
+                direction /= magnitude;
+                whiteBall.setVelocity(direction * magnitude * 0.5f);  // Kecepatan dipengaruhi oleh jarak mouse
+            }
+
+            cueStick.resetPosition();  // Reset posisi cue stick setelah pukulan
         }
-    }
-
-    // Check if the white ball has stopped
-    if (whiteBall.getVelocity() == sf::Vector2f(0.0f, 0.0f)) {
-        cueStick.setVisible(true); // Show cue stick when the ball stops
-    } else {
-        cueStick.setVisible(false); // Hide cue stick while the ball is moving
     }
 }
 
@@ -84,7 +84,7 @@ void Game::draw(sf::RenderWindow& window) {
     for (const auto& ball : balls) {
         ball.draw(window);
     }
-    cueStick.draw(window);
+    cueStick.draw(window);  // Gambar cue stick
 }
 
 void Game::handleCollisions() {
