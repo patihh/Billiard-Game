@@ -1,9 +1,10 @@
 #include "Game.hpp"
+#include <cmath>
 
 Game::Game()
     : table(1100.0f, 600.0f, 40.0f, 25.0f),
-      whiteBall(18.0f, sf::Color::White, false, {275.0f, 300.0f}, {200.0f, 150.0f}),
-      cueStick(450.0f, 12.0f, {275.0f - 450.0f - 10, 300.0f}) {
+      whiteBall(18.0f, sf::Color::White, false, {275.0f, 300.0f}, {0.0f, 0.0f}),
+      cueStick(450.0f, 12.0f, {275.0f, 300.0f}) {
     setupBalls();
 }
 
@@ -12,7 +13,6 @@ void Game::setupBalls() {
     float startY = 600.0f / 2;   // Posisi vertikal tengah meja
     int rows = 5; // Jumlah baris bola dalam formasi segitiga
 
-    // Warna untuk bola solid dan striped
     sf::Color colors[15] = {
         sf::Color(255, 255, 0),   // Bola 1 (kuning)
         sf::Color(0, 0, 255),     // Bola 2 (biru)
@@ -31,20 +31,14 @@ void Game::setupBalls() {
         sf::Color(128, 0, 0)      // Bola 15 (maroon stripe)
     };
 
-    int colorIndex = 0; // Indeks warna
+    int colorIndex = 0;
 
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j <= i; j++) {
-            // Tentukan apakah bola tersebut solid atau striped
-            bool isStriped = (colorIndex >= 8); // Bola 9-15 adalah striped
-
-            // Tentukan posisi bola
-            float x = startX + i * BALL_RADIUS * 2.0f; // Jarak horizontal antar baris
-            float y = startY - i * BALL_RADIUS + j * BALL_RADIUS * 2.0f; // Jarak vertikal antar bola
-
-            // Tambahkan bola ke dalam vektor
+            bool isStriped = (colorIndex >= 8);
+            float x = startX + i * BALL_RADIUS * 2.0f;
+            float y = startY - i * BALL_RADIUS + j * BALL_RADIUS * 2.0f;
             balls.emplace_back(BALL_RADIUS, colors[colorIndex % 15], isStriped, sf::Vector2f(x, y), sf::Vector2f(0.0f, 0.0f));
-
             colorIndex++;
         }
     }
@@ -55,8 +49,18 @@ void Game::update(float deltaTime, const sf::RenderWindow& window) {
     for (auto& ball : balls) {
         ball.update(deltaTime, table.getBounds());
     }
+    handleCollisions();
     sf::Vector2i mousePos = sf::Mouse::getPosition(window);
     cueStick.update(mousePos);
+
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+        sf::Vector2f direction = sf::Vector2f(mousePos) - whiteBall.getPosition();
+        float magnitude = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+        if (magnitude > 0) {
+            direction /= magnitude; // Normalisasi arah
+            whiteBall.setVelocity(direction * 500.0f); // Kecepatan awal bola putih
+        }
+    }
 }
 
 void Game::draw(sf::RenderWindow& window) {
@@ -66,4 +70,23 @@ void Game::draw(sf::RenderWindow& window) {
         ball.draw(window);
     }
     cueStick.draw(window);
+}
+
+void Game::handleCollisions() {
+    for (size_t i = 0; i < balls.size(); ++i) {
+        for (size_t j = i + 1; j < balls.size(); ++j) {
+            checkCollision(balls[i], balls[j]);
+        }
+        checkCollision(whiteBall, balls[i]);
+    }
+}
+
+bool Game::checkCollision(Ball& ball1, Ball& ball2) {
+    sf::Vector2f delta = ball2.getPosition() - ball1.getPosition();
+    float distance = std::sqrt(delta.x * delta.x + delta.y * delta.y);
+    return (distance < BALL_RADIUS * 2.0f);
+}
+
+bool Game::checkPockets(Ball& ball) {
+    return table.isBallInPocket(ball.getPosition(), BALL_RADIUS);
 }

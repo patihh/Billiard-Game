@@ -17,12 +17,16 @@ private:
     std::vector<Ball> balls;
     CueStick cueStick;
 
+    void handleCollisions();
+    bool checkCollision(Ball& ball1, Ball& ball2);
+    void checkPockets();
     void setupBalls();
 
 public:
     Game();
     void update(float deltaTime, const sf::RenderWindow& window);
     void draw(sf::RenderWindow& window);
+    bool checkPockets(Ball& ball);
 };
 
 #endif

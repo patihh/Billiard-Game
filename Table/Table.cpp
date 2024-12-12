@@ -1,4 +1,5 @@
 #include "Table.hpp"
+#include <cmath>
 
 Table::Table(float width, float height, float borderThickness, float pocketRadius) {
     // Setup surface
@@ -53,4 +54,15 @@ void Table::draw(sf::RenderWindow& window) const {
 
 sf::FloatRect Table::getBounds() const {
     return surface.getGlobalBounds();
+}
+
+bool Table::isBallInPocket(const sf::Vector2f& ballPosition, float ballRadius) const {
+    for (int i = 0; i < 6; ++i) {
+        sf::Vector2f delta = ballPosition - pockets[i].getPosition();
+        float distance = std::sqrt(delta.x * delta.x + delta.y * delta.y);
+        if (distance < pockets[i].getRadius() + ballRadius) {
+            return true; // Bola berada di kantong
+        }
+    }
+    return false;
 }
