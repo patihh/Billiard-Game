@@ -4,10 +4,6 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/Ball",
-                "${workspaceFolder}/Table",
-                "${workspaceFolder}/CueStick",
-                "${workspaceFolder}/Game",
                 "C:/Programming/SFML/include",
                 "C:/Programming/MinGW/include"
             ],

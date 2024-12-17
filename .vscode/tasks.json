@@ -12,10 +12,6 @@
                 "-LC:/Programming/SFML/lib",                  // Ganti "/path/to/SFML" sesuai lokasi SFML
                 "-o", "${workspaceFolder}/BilliardGame", // Output program
                 "${workspaceFolder}/main.cpp",          // Tambahkan semua file .cpp
-                "${workspaceFolder}/Ball/Ball.cpp",
-                "${workspaceFolder}/Table/Table.cpp",
-                "${workspaceFolder}/CueStick/CueStick.cpp",
-                "${workspaceFolder}/Game/Game.cpp",
                 "-lsfml-graphics",                     // Library SFML
                 "-lsfml-window",
                 "-lsfml-system"
