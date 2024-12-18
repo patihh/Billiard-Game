@@ -1,5 +1,8 @@
+#ifndef STICK_HPP
+#define STICK_HPP
+
 #include <SFML/Graphics.hpp>
-#include "Ball.cpp"
+#include "Ball.hpp"
 
 class Stick {
 private:
@@ -52,3 +55,5 @@ public:
         }
     }
 };
+
+#endif

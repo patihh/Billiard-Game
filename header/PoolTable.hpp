@@ -1,7 +1,10 @@
+#ifndef POOL_TABLE_HPP
+#define POOL_TABLE_HPP
+
 #include <SFML/Graphics.hpp>
-#include "RoundedRectangleShape.cpp"
+#include "RoundedRectangleShape.hpp"
 #include "Constants.hpp"
-#include "Ball.cpp"
+#include "Ball.hpp"
 
 class PoolTable {
 private:
@@ -65,3 +68,5 @@ public:
         return false;
     }
 };
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef ROUNDED_RECTANGLE_SHAPE_HPP
+#define ROUNDED_RECTANGLE_SHAPE_HPP
+
 #include <SFML/Graphics.hpp>
 #include <cmath>
 
@@ -60,3 +63,5 @@ private:
     float m_radius;
     std::size_t m_pointCount;
 };
+
+#endif

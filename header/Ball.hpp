@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BALL_HPP
+#define BALL_HPP
 
 #include <SFML/Graphics.hpp>
 #include <cmath>
@@ -88,3 +89,5 @@ public:
         velocity = sf::Vector2f(0.0f, 0.0f); 
     }
 };
+
+#endif

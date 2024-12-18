@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
-#include "Ball.cpp"
-#include "Stick.cpp"
-#include "PoolTable.cpp"
+#include "header/Ball.hpp"
+#include "header/Stick.hpp"
+#include "header/PoolTable.hpp"
 #include <iostream>
 
 bool isBallStopped(const sf::Vector2f& velocity) {
