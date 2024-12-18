@@ -122,13 +122,14 @@ int main() {
                 ++it;
             }
         }
+
         static bool turnEnded = false; // Variabel untuk mengecek akhir giliran
-        
         if (isBallStopped(balls[0].getVelocity()) && !turnEnded) {
             if (ballPocketed) {
                 // Jika bola berhasil masuk, pemain tetap melanjutkan giliran
                 std::cout << "Bola masuk! Pemain tetap melanjutkan giliran." << std::endl;
                 turnEnded = true;
+                ballPocketed = false;
             } else {
                 // Jika tidak ada bola masuk, ganti giliran pemain
                 currentPlayer = (currentPlayer == 1) ? 2 : 1;
