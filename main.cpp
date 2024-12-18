@@ -2,6 +2,7 @@
 #include "Ball.cpp"
 #include "Stick.cpp"
 #include "PoolTable.cpp"
+#include <iostream>
 
 bool isBallStopped(const sf::Vector2f& velocity) {
     return std::abs(velocity.x) < VELOCITY_THRESHOLD && std::abs(velocity.y) < VELOCITY_THRESHOLD;
@@ -104,29 +105,36 @@ int main() {
         }
 
         // Periksa bola masuk ke lubang
-        ballPocketed = false; // Reset setiap frame
-        for (auto it = balls.begin(); it != balls.end(); ) {
+        for (auto it = balls.begin(); it != balls.end();) {
             if (table.isPocketed(*it)) {
-                if (it == balls.begin()) { 
-                    it->respawn(); // Bola putih di-respawn
+                if (it == balls.begin()) {
+                    // Jika bola putih masuk
+                    std::cout << "Bola putih masuk ke lubang!" << std::endl;
+                    it->respawn(); 
                     ++it;
                 } else {
-                    it = balls.erase(it); // Hapus bola dengan iterator
-                    ballPocketed = true;
+                    // Jika bola warna masuk
+                    std::cout << "Bola warna masuk" << std::endl;
+                    it = balls.erase(it); 
+                    ballPocketed = true; // Tandai bahwa bola masuk
                 }
             } else {
                 ++it;
             }
         }
-
         static bool turnEnded = false; // Variabel untuk mengecek akhir giliran
         
-        // Jika bola putih berhenti dan giliran belum berakhir
         if (isBallStopped(balls[0].getVelocity()) && !turnEnded) {
-            if (!ballPocketed) { // Tidak ada bola masuk
-                currentPlayer = (currentPlayer == 1) ? 2 : 1; // Ganti pemain
+            if (ballPocketed) {
+                // Jika bola berhasil masuk, pemain tetap melanjutkan giliran
+                std::cout << "Bola masuk! Pemain tetap melanjutkan giliran." << std::endl;
+                turnEnded = true;
+            } else {
+                // Jika tidak ada bola masuk, ganti giliran pemain
+                currentPlayer = (currentPlayer == 1) ? 2 : 1;
+                std::cout << "Tidak ada bola masuk. Ganti giliran ke pemain " << currentPlayer << "." << std::endl;
+                turnEnded = true;
             }
-            turnEnded = true; // Tandai akhir giliran
         }
 
         // Jika bola mulai bergerak lagi, reset kondisi akhir giliran
