@@ -2,6 +2,7 @@
 #include "header/Ball.hpp"
 #include "header/Stick.hpp"
 #include "header/PoolTable.hpp"
+#include "header/StartMenu.hpp"
 #include <iostream>
 
 bool isBallStopped(const sf::Vector2f& velocity) {
@@ -37,6 +38,18 @@ void drawBackground(sf::RenderWindow& window) {
 int main() {
     sf::RenderWindow window(sf::VideoMode(BackWidth, BackHeight), "Billiard Simulation");
 
+    sf::Font font;
+    if (!font.loadFromFile("arial.ttf")) {
+        std::cerr << "Font loading failed!" << std::endl;
+        return -1;
+    }
+    StartMenu menu;
+    menu.show(window, font);
+    bool gameStarted = false;
+    while (!gameStarted && window.isOpen()) {
+        gameStarted = menu.handleInput(window);
+    }
+
     std::vector<Ball> balls;
     balls.push_back(Ball(BallRadius, sf::Vector2f(200.0f, 330.0f), sf::Color::White, 0)); 
 
@@ -61,12 +74,6 @@ int main() {
     Stick cue;
     sf::Clock clock;
 
-    // Font untuk indikator pemain
-    sf::Font font;
-    if (!font.loadFromFile("arial.ttf")) {
-        return -1; // Pastikan font ada di direktori
-    }
-
     sf::Text player1Text("Player 1", font, 30);
     sf::Text player2Text("Player 2", font, 30);
 
@@ -74,7 +81,7 @@ int main() {
     player2Text.setPosition(BackWidth - 150, 50);
 
     // Variabel pemain
-    int currentPlayer = 1; // 1 untuk Player 1, 2 untuk Player 2
+    int currentPlayer = 2; // 1 untuk Player 1, 2 untuk Player 2
     bool ballPocketed = false;
 
     while (window.isOpen()) {
@@ -108,13 +115,9 @@ int main() {
         for (auto it = balls.begin(); it != balls.end();) {
             if (table.isPocketed(*it)) {
                 if (it == balls.begin()) {
-                    // Jika bola putih masuk
-                    std::cout << "Bola putih masuk ke lubang!" << std::endl;
                     it->respawn(); 
                     ++it;
                 } else {
-                    // Jika bola warna masuk
-                    std::cout << "Bola warna masuk" << std::endl;
                     it = balls.erase(it); 
                     ballPocketed = true; // Tandai bahwa bola masuk
                 }
@@ -126,14 +129,11 @@ int main() {
         static bool turnEnded = false; // Variabel untuk mengecek akhir giliran
         if (isBallStopped(balls[0].getVelocity()) && !turnEnded) {
             if (ballPocketed) {
-                // Jika bola berhasil masuk, pemain tetap melanjutkan giliran
-                std::cout << "Bola masuk! Pemain tetap melanjutkan giliran." << std::endl;
                 turnEnded = true;
                 ballPocketed = false;
             } else {
                 // Jika tidak ada bola masuk, ganti giliran pemain
                 currentPlayer = (currentPlayer == 1) ? 2 : 1;
-                std::cout << "Tidak ada bola masuk. Ganti giliran ke pemain " << currentPlayer << "." << std::endl;
                 turnEnded = true;
             }
         }
